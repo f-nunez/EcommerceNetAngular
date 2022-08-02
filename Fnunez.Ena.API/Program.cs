@@ -1,8 +1,8 @@
 using Fnunez.Ena.API.Extensions;
+using Fnunez.Ena.API.Helpers;
 using Fnunez.Ena.API.Middlewares;
 using Fnunez.Ena.Infrasctructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,21 +31,17 @@ app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseStaticFiles();
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Content")
-    ),
-    RequestPath = "/content"
-});
 
 app.UseAuthorization();
 
-app.MapControllers();
-
-app.MapFallbackToController("Index", "Fallback");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
