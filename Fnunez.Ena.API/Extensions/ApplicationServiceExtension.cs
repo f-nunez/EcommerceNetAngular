@@ -1,6 +1,7 @@
 using Fnunez.Ena.API.Errors;
 using Fnunez.Ena.Core.Interfaces;
 using Fnunez.Ena.Infrasctructure.Data;
+using Fnunez.Ena.Infrasctructure.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fnunez.Ena.API.Extensions;
@@ -10,6 +11,7 @@ public static class ApplicationServiceExtension
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+        services.AddScoped<IProductRepository, ProductRepository>();
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = actionContext =>
