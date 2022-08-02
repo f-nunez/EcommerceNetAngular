@@ -12,6 +12,8 @@ builder.Services.AddDbContext<StoreDbContext>(x =>
 
 builder.Services.AddApplicationServices();
 
+builder.Services.AddAutoMapper(typeof(MappingProfilesHelper));
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
