@@ -1,10 +1,15 @@
 using System.Reflection;
+using Fnunez.Ena.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fnunez.Ena.Infrasctructure.Data;
 
 public class StoreDbContext : DbContext
 {
+    public DbSet<ProductBrand> ProductBrands { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductType> ProductTypes { get; set; }
+
     public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options)
     {
     }
