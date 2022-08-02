@@ -7,11 +7,18 @@ using Microsoft.Extensions.FileProviders;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<StoreDbContext>(x =>
+    x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddApplicationServices();
+
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerDocumentation();
 
+// Configure the http request pipeline
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
