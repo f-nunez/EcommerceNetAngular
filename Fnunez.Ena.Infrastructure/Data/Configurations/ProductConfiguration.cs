@@ -15,16 +15,18 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .ValueGeneratedOnAdd();
 
         builder.Property(p => p.Name)
-            .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(200)
+            .IsRequired();
 
         builder.Property(p => p.Description)
+            .HasMaxLength(10000)
             .IsRequired();
 
         builder.Property(p => p.Price)
             .HasPrecision(18, 2);
 
         builder.Property(p => p.PictureUrl)
+            .HasMaxLength(2048)
             .IsRequired();
 
         builder.HasOne(p => p.ProductBrand)
