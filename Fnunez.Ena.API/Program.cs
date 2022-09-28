@@ -3,12 +3,19 @@ using Fnunez.Ena.API.Helpers;
 using Fnunez.Ena.API.Middlewares;
 using Fnunez.Ena.Infrasctructure.Data;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<StoreDbContext>(x =>
     x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
+{
+    var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
+    return ConnectionMultiplexer.Connect(configuration);
+});
 
 builder.Services.AddApplicationServices();
 
