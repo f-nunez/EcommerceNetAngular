@@ -1,6 +1,7 @@
 using Fnunez.Ena.API.Extensions;
 using Fnunez.Ena.API.Helpers;
 using Fnunez.Ena.API.Middlewares;
+using Fnunez.Ena.Infrastructure;
 using Fnunez.Ena.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -11,9 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<StoreDbContext>(x =>
     x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<AppIdentityDbContext>(x =>
+    x.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
-    var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
+    var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("RedisConnection"), true);
     return ConnectionMultiplexer.Connect(configuration);
 });
 
