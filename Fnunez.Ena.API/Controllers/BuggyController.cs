@@ -1,5 +1,5 @@
 using Fnunez.Ena.API.Errors;
-using Fnunez.Ena.Infrasctructure.Data;
+using Fnunez.Ena.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fnunez.Ena.API.Controllers;

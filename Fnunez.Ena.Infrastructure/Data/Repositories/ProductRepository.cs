@@ -2,7 +2,7 @@ using Fnunez.Ena.Core.Entities;
 using Fnunez.Ena.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fnunez.Ena.Infrasctructure.Data.Repositories;
+namespace Fnunez.Ena.Infrastructure.Data.Repositories;
 
 public class ProductRepository : IProductRepository
 {

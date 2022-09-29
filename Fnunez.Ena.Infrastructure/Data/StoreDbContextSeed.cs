@@ -2,7 +2,7 @@ using System.Text.Json;
 using Fnunez.Ena.Core.Entities;
 using Microsoft.Extensions.Logging;
 
-namespace Fnunez.Ena.Infrasctructure.Data;
+namespace Fnunez.Ena.Infrastructure.Data;
 
 public class StoreDbContextSeed
 {

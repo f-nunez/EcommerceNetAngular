@@ -1,7 +1,7 @@
 using Fnunez.Ena.API.Extensions;
 using Fnunez.Ena.API.Helpers;
 using Fnunez.Ena.API.Middlewares;
-using Fnunez.Ena.Infrasctructure.Data;
+using Fnunez.Ena.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 

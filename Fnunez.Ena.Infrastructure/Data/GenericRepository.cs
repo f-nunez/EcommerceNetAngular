@@ -3,7 +3,7 @@ using Fnunez.Ena.Core.Interfaces;
 using Fnunez.Ena.Core.Specifications;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fnunez.Ena.Infrasctructure.Data;
+namespace Fnunez.Ena.Infrastructure.Data;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 {

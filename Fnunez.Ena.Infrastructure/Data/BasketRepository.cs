@@ -3,7 +3,7 @@ using Fnunez.Ena.Core.Entities;
 using Fnunez.Ena.Core.Interfaces;
 using StackExchange.Redis;
 
-namespace Fnunez.Ena.Infrasctructure.Data;
+namespace Fnunez.Ena.Infrastructure.Data;
 
 public class BasketRepository : IBasketRepository
 {

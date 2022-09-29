@@ -1,7 +1,7 @@
 using Fnunez.Ena.API.Errors;
 using Fnunez.Ena.Core.Interfaces;
-using Fnunez.Ena.Infrasctructure.Data;
-using Fnunez.Ena.Infrasctructure.Data.Repositories;
+using Fnunez.Ena.Infrastructure.Data;
+using Fnunez.Ena.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fnunez.Ena.API.Extensions;
