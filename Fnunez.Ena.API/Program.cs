@@ -1,8 +1,11 @@
 using Fnunez.Ena.API.Extensions;
 using Fnunez.Ena.API.Helpers;
 using Fnunez.Ena.API.Middlewares;
+using Fnunez.Ena.Core.Entities.Identity;
 using Fnunez.Ena.Infrastructure;
 using Fnunez.Ena.Infrastructure.Data;
+using Fnunez.Ena.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
@@ -22,6 +25,8 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 });
 
 builder.Services.AddApplicationServices();
+
+builder.Services.AddIdentityServices();
 
 builder.Services.AddAutoMapper(typeof(MappingProfilesHelper));
 
@@ -71,6 +76,11 @@ try
     var context = services.GetRequiredService<StoreDbContext>();
     await context.Database.MigrateAsync();
     await StoreDbContextSeed.SeedAsync(context, loggerFactory);
+
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+    await identityContext.Database.MigrateAsync();
+    await AppIdentityDbContextSeed.SeedUserAsync(userManager);
 }
 catch (Exception e)
 {
