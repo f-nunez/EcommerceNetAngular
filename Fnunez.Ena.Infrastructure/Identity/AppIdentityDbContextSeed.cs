@@ -11,7 +11,7 @@ public class AppIdentityDbContextSeed
             return;
 
         AppUser demoUser = CreateDemoUser();
-        await userManager.CreateAsync(demoUser, "password");
+        await userManager.CreateAsync(demoUser, "P4$$w0rd");
     }
 
     private static AppUser CreateDemoUser()
@@ -19,8 +19,8 @@ public class AppIdentityDbContextSeed
         return new AppUser
         {
             DisplayName = "Franky",
-            Email = "francisco@nunez.ninja.com",
-            UserName = "guestUser",
+            Email = "francisco@nunez.ninja",
+            UserName = "francisco@nunez.ninja",
             Address = new Address
             {
                 FirstName = "Francisco",
