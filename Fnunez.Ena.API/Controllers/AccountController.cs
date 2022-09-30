@@ -1,5 +1,4 @@
 using System.Net;
-using System.Security.Claims;
 using AutoMapper;
 using Fnunez.Ena.API.Dtos;
 using Fnunez.Ena.API.Errors;
