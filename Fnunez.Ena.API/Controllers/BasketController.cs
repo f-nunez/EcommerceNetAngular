@@ -1,3 +1,5 @@
+using AutoMapper;
+using Fnunez.Ena.API.Dtos;
 using Fnunez.Ena.Core.Entities;
 using Fnunez.Ena.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +9,12 @@ namespace Fnunez.Ena.API.Controllers;
 public class BasketController : BaseApiController
 {
     private readonly IBasketRepository _basketRepository;
+    private readonly IMapper _mapper;
 
-    public BasketController(IBasketRepository basketRepository)
+    public BasketController(IBasketRepository basketRepository, IMapper mapper)
     {
         _basketRepository = basketRepository;
+        _mapper = mapper;
     }
 
     [HttpDelete]
@@ -22,14 +26,20 @@ public class BasketController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<CustomerBasket>> GetBasket(string id)
     {
-        var basket = await _basketRepository.GetBasketAsync(id);
+        CustomerBasket basket = await _basketRepository.GetBasketAsync(id);
+
         return Ok(basket ?? new CustomerBasket(id));
     }
 
     [HttpPost]
-    public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasket basket)
+    public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDto customerBasketDto)
     {
-        var updatedBasket = await _basketRepository.UpdateBasketAsync(basket);
+        CustomerBasket customerBasket = _mapper
+            .Map<CustomerBasketDto, CustomerBasket>(customerBasketDto);
+
+        CustomerBasket updatedBasket = await _basketRepository
+            .UpdateBasketAsync(customerBasket);
+
         return Ok(updatedBasket);
     }
 }
