@@ -10,7 +10,7 @@
         <i class="fa fa-shopping-cart fa-2x me-5 text-dark"></i>
         <div class="cart-no" *ngIf="(basket$ | async) as basket">{{basket.items.length}}</div>
       </a>
-      <a class="btn btn-outline-secondary me-2" href="#">Login</a>
       <a class="btn btn-outline-secondary me-3" href="#">Sign up</a>
+      <a class="btn btn-outline-secondary me-2" href="#" routerLink="/account/login">Login</a>
   </div>
 </header>
