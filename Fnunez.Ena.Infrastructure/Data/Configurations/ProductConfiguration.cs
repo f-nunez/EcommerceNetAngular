@@ -2,7 +2,7 @@ using Fnunez.Ena.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Fnunez.Ena.Infrasctructure.Data.Configurations;
+namespace Fnunez.Ena.Infrastructure.Data.Configurations;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {

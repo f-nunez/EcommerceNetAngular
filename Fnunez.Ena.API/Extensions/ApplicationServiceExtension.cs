@@ -1,7 +1,8 @@
 using Fnunez.Ena.API.Errors;
 using Fnunez.Ena.Core.Interfaces;
-using Fnunez.Ena.Infrasctructure.Data;
-using Fnunez.Ena.Infrasctructure.Data.Repositories;
+using Fnunez.Ena.Infrastructure.Data;
+using Fnunez.Ena.Infrastructure.Data.Repositories;
+using Fnunez.Ena.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fnunez.Ena.API.Extensions;
@@ -10,6 +11,7 @@ public static class ApplicationServiceExtension
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();

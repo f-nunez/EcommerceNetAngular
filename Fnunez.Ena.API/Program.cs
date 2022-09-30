@@ -1,7 +1,11 @@
 using Fnunez.Ena.API.Extensions;
 using Fnunez.Ena.API.Helpers;
 using Fnunez.Ena.API.Middlewares;
-using Fnunez.Ena.Infrasctructure.Data;
+using Fnunez.Ena.Core.Entities.Identity;
+using Fnunez.Ena.Infrastructure;
+using Fnunez.Ena.Infrastructure.Data;
+using Fnunez.Ena.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
@@ -11,13 +15,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<StoreDbContext>(x =>
     x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<AppIdentityDbContext>(x =>
+    x.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
-    var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
+    var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("RedisConnection"), true);
     return ConnectionMultiplexer.Connect(configuration);
 });
 
 builder.Services.AddApplicationServices();
+
+builder.Services.AddIdentityServices(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(MappingProfilesHelper));
 
@@ -52,6 +61,8 @@ app.UseStaticFiles();
 
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
@@ -67,6 +78,11 @@ try
     var context = services.GetRequiredService<StoreDbContext>();
     await context.Database.MigrateAsync();
     await StoreDbContextSeed.SeedAsync(context, loggerFactory);
+
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+    await identityContext.Database.MigrateAsync();
+    await AppIdentityDbContextSeed.SeedUserAsync(userManager);
 }
 catch (Exception e)
 {

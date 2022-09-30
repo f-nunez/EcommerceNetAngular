@@ -2,7 +2,7 @@ using Fnunez.Ena.Core.Entities;
 using Fnunez.Ena.Core.Specifications;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fnunez.Ena.Infrasctructure.Data;
+namespace Fnunez.Ena.Infrastructure.Data;
 
 public class SpecificationEvaluator<T> where T : BaseEntity
 {

@@ -2,7 +2,7 @@ using System.Reflection;
 using Fnunez.Ena.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fnunez.Ena.Infrasctructure.Data;
+namespace Fnunez.Ena.Infrastructure.Data;
 
 public class StoreDbContext : DbContext
 {
