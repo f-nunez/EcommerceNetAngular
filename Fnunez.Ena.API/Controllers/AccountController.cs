@@ -76,6 +76,16 @@ public class AccountController : BaseApiController
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
+        if (EmailExists(registerDto.Email).Result.Value)
+        {
+            return new BadRequestObjectResult(
+                new ApiValidationErrorResponse
+                {
+                    Errors = new[] { "Email address is in user" }
+                }
+            );
+        }
+
         var user = new AppUser
         {
             DisplayName = registerDto.DisplayName,
