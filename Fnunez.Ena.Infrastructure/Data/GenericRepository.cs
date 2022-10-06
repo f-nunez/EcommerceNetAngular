@@ -14,9 +14,19 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         _dbContext = dbContext;
     }
 
+    public void Add(T entity)
+    {
+        _dbContext.Set<T>().Add(entity);
+    }
+
     public async Task<int> CountAsync(ISpecification<T> specification)
     {
         return await ApplySpecification(specification).CountAsync();
+    }
+
+    public void Delete(T entity)
+    {
+        _dbContext.Set<T>().Remove(entity);
     }
 
     public async Task<T> GetByIdAsync(int id)
@@ -37,6 +47,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public async Task<IReadOnlyList<T>> GetListAsync(ISpecification<T> specification)
     {
         return await ApplySpecification(specification).ToListAsync();
+    }
+
+    public void Update(T entity)
+    {
+        _dbContext.Set<T>().Attach(entity);
+        _dbContext.Entry(entity).State = EntityState.Modified;
     }
 
     private IQueryable<T> ApplySpecification(ISpecification<T> specification)
