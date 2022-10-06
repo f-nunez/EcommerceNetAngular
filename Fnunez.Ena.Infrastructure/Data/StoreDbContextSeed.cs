@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Fnunez.Ena.Core.Entities;
+using Fnunez.Ena.Core.Entities.OrderAggregate;
 using Microsoft.Extensions.Logging;
 
 namespace Fnunez.Ena.Infrastructure.Data;
@@ -39,6 +40,17 @@ public class StoreDbContextSeed
 
                 foreach (var item in products)
                     dbContext.Products.Add(item);
+
+                await dbContext.SaveChangesAsync();
+            }
+
+            if (!dbContext.DeliveryMethods.Any())
+            {
+                string data = File.ReadAllText("../Fnunez.Ena.Infrastructure/Data/SeedData/delivery.json");
+                var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(data);
+
+                foreach (var item in deliveryMethods)
+                    dbContext.DeliveryMethods.Add(item);
 
                 await dbContext.SaveChangesAsync();
             }
