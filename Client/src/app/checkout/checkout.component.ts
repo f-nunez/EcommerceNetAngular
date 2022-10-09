@@ -24,6 +24,9 @@ export class CheckoutComponent implements OnInit {
         city: [null, Validators.required],
         state: [null, Validators.required],
         zipCode: [null, Validators.required]
+      }),
+      deliveryForm: this.formBuilder.group({
+        deliveryMethod: [null, Validators.required]
       })
     });
   }
