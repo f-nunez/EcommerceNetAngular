@@ -2,19 +2,19 @@
     <table class="table">
         <thead>
             <tr>
-                <th class="border-0 bg-light" scope="col">
+                <th class="border-0" scope="col" [class.bg-light]="isBasketView">
                     <div class="p-2 px-2 text-uppercase">Product</div>
                 </th>
-                <th class="border-0 bg-light" scope="col">
+                <th class="border-0" scope="col" [class.bg-light]="isBasketView">
                     <div class="py-2 text-uppercase">Price</div>
                 </th>
-                <th class="border-0 bg-light" scope="col">
+                <th class="border-0" scope="col" [class.bg-light]="isBasketView">
                     <div class="py-2 text-uppercase">Quantity</div>
                 </th>
-                <th class="border-0 bg-light" scope="col">
+                <th class="border-0" scope="col" [class.bg-light]="isBasketView">
                     <div class="py-2 text-uppercase">Total</div>
                 </th>
-                <th class="border-0 bg-light" scope="col">
+                <th class="border-0 bg-light" scope="col" *ngIf="isBasketView">
                     <div class="py-2 text-uppercase">Remove</div>
                 </th>
             </tr>
@@ -40,12 +40,12 @@
                 </td>
 
                 <td class="align-middle">
-                    <div class="d-flex align-items-center">
-                        <i class="fa fa-minus-circle text-warning me-2" (click)="decrementItemQuantity(item)" style="cursor: pointer; font-size: 2em;"></i>
+                    <div class="d-flex align-items-center" [class.justify-content-center]="!isBasketView">
+                        <i class="fa fa-minus-circle text-warning me-2" (click)="decrementItemQuantity(item)" style="cursor: pointer; font-size: 2em;" *ngIf="isBasketView"></i>
                         <span class="fw-bold" style="font-size: 1.5em;">
                             {{item.quantity}}
                         </span>
-                        <i class="fa fa-plus-circle text-warning mx-2" (click)="incrementItemQuantity(item)" style="cursor: pointer; font-size: 2em;"></i>
+                        <i class="fa fa-plus-circle text-warning mx-2" (click)="incrementItemQuantity(item)" style="cursor: pointer; font-size: 2em;" *ngIf="isBasketView"></i>
                     </div>
                 </td>
 
@@ -55,7 +55,7 @@
 
                 <td class="align-middle text-center">
                     <a class="text-danger">
-                        <i class="fa fa-trash" (click)="removeItemFromBasket(item)" style="cursor: pointer; font-size: 2em;"></i>
+                        <i class="fa fa-trash" (click)="removeItemFromBasket(item)" style="cursor: pointer; font-size: 2em;" *ngIf="isBasketView"></i>
                     </a>
                 </td>
             </tr>
