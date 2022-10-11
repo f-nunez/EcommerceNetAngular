@@ -27,7 +27,7 @@ public class OrderController : BaseApiController
     {
         string email = HttpContext.User.RetrieveEmailFromClaimsPrincipal();
 
-        Address address = _mapper.Map<AddressDto, Address>(orderDto.ShippingToAddress);
+        Address address = _mapper.Map<AddressDto, Address>(orderDto.ShipToAddress);
 
         Order order = await _orderService
             .CreateOrderAsync(email, orderDto.DeliveryMethodId, orderDto.BasketId, address);

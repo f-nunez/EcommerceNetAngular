@@ -1,0 +1,13 @@
+<div class="container">
+    <ul class="nav nav-pills nav-justified bg-light">
+        <li class="nav-item" *ngFor="let step of steps; let i = index">
+            <button class="nav-link btn btn-block py-3 fw-bold text-uppercase" [class.active]="selectedIndex === i" (click)="onClick(i)">
+                {{step.label}}
+            </button>
+        </li>
+    </ul>
+
+    <div>
+        <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+    </div>
+</div>
