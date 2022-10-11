@@ -14,7 +14,7 @@ export class CheckoutService {
   constructor(private http: HttpClient) { }
 
   createOrder(order: IOrderToCreate) {
-    return this.http.post(this.baseUrl + 'order', order);
+    return this.http.post(this.baseUrl + 'order/createorder', order);
   }
 
   getDeliveryMethods() {
