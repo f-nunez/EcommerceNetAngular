@@ -27,16 +27,12 @@ public class PaymentService : IPaymentService
         StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
 
         CustomerBasket basket = await _basketRepository.GetBasketAsync(basketId);
-        decimal shippingPrice = 0m;
+        DeliveryMethod deliveryMethod = null;
 
         if (basket.DeliveryMethodId.HasValue)
-        {
-            DeliveryMethod deliveryMethod = await _unitOfWork
+            deliveryMethod = await _unitOfWork
                 .Repository<DeliveryMethod>()
                 .GetByIdAsync((int)basket.DeliveryMethodId);
-
-            shippingPrice = deliveryMethod.Price;
-        }
 
         foreach (var item in basket.Items)
         {
@@ -51,31 +47,50 @@ public class PaymentService : IPaymentService
         var paymentIntentService = new PaymentIntentService();
 
         PaymentIntent paymentIntent;
+
         if (string.IsNullOrEmpty(basket.PaymentIntentId))
         {
-            var options = new PaymentIntentCreateOptions
-            {
-                Amount = (long)basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long)shippingPrice * 100,
-                Currency = "usd",
-                PaymentMethodTypes = new List<string> { "card" }
-            };
-
+            var options = MapPaymentIntentCreateOptions(basket, deliveryMethod);
             paymentIntent = await paymentIntentService.CreateAsync(options);
             basket.PaymentIntentId = paymentIntent.Id;
             basket.ClientSecret = paymentIntent.ClientSecret;
         }
         else
         {
-            var options = new PaymentIntentUpdateOptions
-            {
-                Amount = (long)basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long)shippingPrice * 100
-            };
-
+            var options = MapPaymentIntentUpdateOptions(basket, deliveryMethod);
             await paymentIntentService.UpdateAsync(basket.PaymentIntentId, options);
         }
 
         await _basketRepository.UpdateBasketAsync(basket);
 
         return basket;
+    }
+
+    private PaymentIntentCreateOptions MapPaymentIntentCreateOptions(CustomerBasket basket,
+        DeliveryMethod deliveryMethod)
+    {
+        return new PaymentIntentCreateOptions
+        {
+            Amount = CalculateTotalAmountToPay(basket, deliveryMethod),
+            Currency = "usd",
+            PaymentMethodTypes = new List<string> { "card" }
+        };
+    }
+
+    private PaymentIntentUpdateOptions MapPaymentIntentUpdateOptions(CustomerBasket basket,
+        DeliveryMethod deliveryMethod)
+    {
+        return new PaymentIntentUpdateOptions
+        {
+            Amount = CalculateTotalAmountToPay(basket, deliveryMethod),
+        };
+    }
+
+    private long CalculateTotalAmountToPay(CustomerBasket basket, DeliveryMethod deliveryMethod)
+    {
+        decimal totalAmountByItems = basket.Items.Sum(i => i.Quantity * i.Price) * 100;
+        decimal totalAmountByShipping = deliveryMethod != null ? deliveryMethod.Price * 100 : 0;
+
+        return Convert.ToInt64(totalAmountByItems + totalAmountByShipping);
     }
 }
