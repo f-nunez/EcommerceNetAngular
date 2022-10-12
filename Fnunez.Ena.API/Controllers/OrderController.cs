@@ -45,7 +45,7 @@ public class OrderController : BaseApiController
     }
 
     [HttpGet("getorder/{id}")]
-    public async Task<ActionResult<Order>> GetOrder(int id)
+    public async Task<ActionResult<OrderToReturnDto>> GetOrder(int id)
     {
         string email = HttpContext.User.RetrieveEmailFromClaimsPrincipal();
 
