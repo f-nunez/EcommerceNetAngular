@@ -6,6 +6,7 @@ export interface IBasket {
     deliveryMethodId?: number;
     clientSecret?: string;
     paymentIntentId?: string;
+    shippingPrice?: number;
 }
 
 export interface IBasketItem {
