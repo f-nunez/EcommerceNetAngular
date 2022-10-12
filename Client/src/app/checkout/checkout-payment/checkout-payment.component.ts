@@ -37,8 +37,7 @@ export class CheckoutPaymentComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngAfterViewInit(): void {
-    const baseUrl = environment.apiUrl;
-    this.stripe = Stripe(baseUrl);
+    this.stripe = Stripe(environment.stripePublishableKey);
     const elements = this.stripe.elements();
 
     this.cardNumber = elements.create('cardNumber');
@@ -73,9 +72,23 @@ export class CheckoutPaymentComponent implements OnInit, AfterViewInit, OnDestro
     const orderToCreate = this.getOrderToCreate(basket);
     this.checkoutService.createOrder(orderToCreate).subscribe((order: IOrder) => {
       this.toastr.success('Order created successfully');
-      this.basketService.deleteBasketOrdered(basket.id);
-      const navigationExtras: NavigationExtras = { state: order };
-      this.router.navigate(['checkout/success'], navigationExtras);
+      this.stripe.confirmCardPayment(basket.clientSecret, {
+        payment_method: {
+          card: this.cardNumber,
+          billing_details: {
+            name: this.checkoutForm.get('paymentForm').get('nameOnCard').value
+          }
+        }
+      }).then(result => {
+        console.log(result);
+        if (result.paymentIntent) {
+          this.basketService.deleteBasketOrdered(basket.id);
+          const navigationExtras: NavigationExtras = { state: order };
+          this.router.navigate(['checkout/success'], navigationExtras);
+        } else {
+          this.toastr.error('Payment error');
+        }
+      });
     }, error => {
       console.log(error);
     });
