@@ -38,6 +38,9 @@ export class CheckoutComponent implements OnInit {
       }),
       deliveryForm: this.formBuilder.group({
         deliveryMethod: [null, Validators.required]
+      }),
+      paymentForm: this.formBuilder.group({
+        nameOnCard: [null, Validators.required]
       })
     });
   }
