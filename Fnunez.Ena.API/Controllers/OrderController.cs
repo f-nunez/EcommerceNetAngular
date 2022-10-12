@@ -45,7 +45,7 @@ public class OrderController : BaseApiController
     }
 
     [HttpGet("getorder/{id}")]
-    public async Task<ActionResult<Order>> GetOrder(int id)
+    public async Task<ActionResult<OrderToReturnDto>> GetOrder(int id)
     {
         string email = HttpContext.User.RetrieveEmailFromClaimsPrincipal();
 
@@ -66,9 +66,9 @@ public class OrderController : BaseApiController
 
         IReadOnlyList<Order> orders = await _orderService.GetOrdersAsync(email);
 
-        IReadOnlyList<OrderToReturnDto> OrderDtos = _mapper
+        IReadOnlyList<OrderToReturnDto> orderDtos = _mapper
             .Map<IReadOnlyList<Order>, IReadOnlyList<OrderToReturnDto>>(orders);
 
-        return Ok(OrderDtos);
+        return Ok(orderDtos);
     }
 }

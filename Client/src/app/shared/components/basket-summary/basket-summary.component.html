@@ -1,7 +1,7 @@
-<ng-container *ngIf="basket$ | async">
+<ng-container *ngIf="items.length > 0">
     <div class="table-responsive">
-        <table class="table">
-            <thead>
+        <table class="table table-borderless">
+            <thead class="border-0 py-2" [class.thead-light]="isBasketView || isOrderView">
                 <tr>
                     <th class="border-0" scope="col" [class.bg-light]="isBasketView">
                         <div class="p-2 px-2 text-uppercase">Product</div>
@@ -21,15 +21,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of (basket$ | async).items">
+                <tr class="border-0" *ngFor="let item of items">
                     <th scope="row">
                         <div class="p-2">
                             <img class="img-fluid" src="{{item.pictureUrl}}" alt="{{item.productName}}" style="max-height: 50px;">
                             <div class="ms-3 d-inline-block align-middle">
                                 <h5 class="mb-0">
-                                    <a class="text-dark" routerLink="/shop/{{item.id}}">{{item.productName}}</a>
+                                    <a class="text-dark" routerLink="/shop/{{item.id || item.productId}}">{{item.productName}}</a>
                                 </h5>
-                                <span class="text-muted fw-normal fst-italic d-block">
+                                <span class="text-muted fw-normal fst-italic d-block" *ngIf="item.type">
                                     Type: {{item.type}}
                                 </span>
                             </div>
