@@ -1,6 +1,7 @@
 using AutoMapper;
 using Fnunez.Ena.API.Dtos;
 using Fnunez.Ena.API.Errors;
+using Fnunez.Ena.API.Filters;
 using Fnunez.Ena.API.Helpers;
 using Fnunez.Ena.Core.Entities;
 using Fnunez.Ena.Core.Interfaces;
@@ -28,6 +29,7 @@ public class ProductsController : BaseApiController
         _productsRepo = productsRepository;
     }
 
+    [Cached(300)]
     [HttpGet]
     public async Task<ActionResult<PaginationHelper<ProductToReturnDto>>> GetProducts(
         [FromQuery] ProductSpecParams productParams)
@@ -46,6 +48,7 @@ public class ProductsController : BaseApiController
             productParams.PageSize, totalItems, data));
     }
 
+    [Cached(300)]
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -60,12 +63,14 @@ public class ProductsController : BaseApiController
         return _mapper.Map<ProductToReturnDto>(product);
     }
 
+    [Cached(300)]
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetBrands()
     {
         return Ok(await _productBrandRepo.GetListAllAsync());
     }
 
+    [Cached(300)]
     [HttpGet("types")]
     public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetTypes()
     {
