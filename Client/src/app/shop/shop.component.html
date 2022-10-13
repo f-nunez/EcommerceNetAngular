@@ -6,9 +6,9 @@
 
                 <h5 class="text-warning ms-3 mt-4 mb-3">Sort</h5>
                 <select class="custom-select mb-4" (change)="onSortSelected($event.target.value)">
-                    <option
-                        *ngFor="let sort of sortOptions"
-                        [value]="sort.value">
+                    <option *ngFor="let sort of sortOptions"
+                        [value]="sort.value"
+                        [selected]="shopParams.sort === sort.value">
                         {{sort.name}}
                     </option>
                 </select>
@@ -51,12 +51,16 @@
                 <div class="d-flex justify-content-between align-items-center mt-2" *ngIf="products">
                     <input type="text" class="form-control me-2" style="width: 300px;"
                         placeholder="Search"
-                        (keyup)="onSearch()"
+                        (keyup.enter)="onSearch()"
                         #search>
                     <button class="btn btn-outline-primary my-2"
-                        (click)="onSearch()">Search</button>
+                        (click)="onSearch()">
+                        Search
+                    </button>
                     <button class="btn btn-outline-success my-2 ms-2"
-                        (click)="onReset()">Reset</button>
+                        (click)="onReset()">
+                        Reset
+                    </button>
                 </div>
 
             </div>
@@ -71,6 +75,7 @@
                 <app-paging-footer
                     [pageSize]="shopParams.pageSize"
                     [totalCount]="totalCount"
+                    [pageNumber]="shopParams.pageNumber"
                     (pageChanged)="onPageChanged($event)">
                 </app-paging-footer>
             </div>

@@ -28,9 +28,9 @@ export class ShopComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getProducts(true);
     this.getBrands();
     this.getProductTypes();
-    this.getProducts();
   }
 
   getBrands() {
@@ -40,8 +40,8 @@ export class ShopComponent implements OnInit {
     });
   }
 
-  getProducts() {
-    this.shopService.getProducts().subscribe({
+  getProducts(useCache: boolean = false) {
+    this.shopService.getProducts(useCache).subscribe({
       next: (response) => {
         this.products = response.data;
         this.totalCount = response.count;
@@ -72,7 +72,7 @@ export class ShopComponent implements OnInit {
 
     shopParams.pageNumber = event;
     this.shopService.setShopParams(shopParams);
-    this.getProducts();
+    this.getProducts(true);
   }
 
   onProductTypeSelected(productTypeId: number) {
