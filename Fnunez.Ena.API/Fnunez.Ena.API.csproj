@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Fnunez.Ena.Infrastructure\Fnunez.Ena.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content  Include="Content\**" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
