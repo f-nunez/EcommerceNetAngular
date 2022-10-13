@@ -89,6 +89,25 @@ public class PaymentService : IPaymentService
         return order;
     }
 
+    public async Task<Order> UpdateOrderPaymentSucceeded(string paymentIntentId)
+    {
+        var specification = new OrderByPaymentIntentWithItemsSpecification(paymentIntentId);
+        Order order = await _unitOfWork
+            .Repository<Order>()
+            .GetFirstOrDefaultAsync(specification);
+
+        if (order == null)
+            return null;
+
+        order.Status = OrderStatus.PaymentReceived;
+
+        _unitOfWork.Repository<Order>().Update(order);
+
+        await _unitOfWork.CompleteAsync();
+
+        return order;
+    }
+
     private PaymentIntentCreateOptions MapPaymentIntentCreateOptions(CustomerBasket basket,
         DeliveryMethod deliveryMethod)
     {
