@@ -22,3 +22,7 @@ button.nav-link {
         color: #333;
     }
 }
+
+.nav-pills .nav-link:disabled {
+    opacity: 1;
+}
