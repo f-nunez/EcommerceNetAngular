@@ -22,7 +22,6 @@ export class CheckoutReviewComponent implements OnInit {
 
   createPaymentIntent() {
     return this.basketService.createPaymentIntent().subscribe((response: any) => {
-      this.toastr.success('Payment intent was created');
       this.checkoutStepper.next();
     }, error => {
       this.toastr.error(error.messsage);
