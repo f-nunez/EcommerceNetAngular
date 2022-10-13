@@ -4,7 +4,6 @@ import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BasketService } from 'src/app/basket/basket.service';
 import { IBasket } from 'src/app/shared/models/basket';
-import { IOrder } from 'src/app/shared/models/order';
 import { environment } from 'src/environments/environment';
 import { CheckoutService } from '../checkout.service';
 
@@ -27,6 +26,9 @@ export class CheckoutPaymentComponent implements OnInit, AfterViewInit, OnDestro
   cardErrors: any;
   cardHandler = this.onChange.bind(this);
   loading: boolean = false;
+  isCardNumberValid: boolean = false;
+  isCardExpiryValid: boolean = false;
+  isCardCvcValid: boolean = false;
 
   constructor(
     private basketService: BasketService,
@@ -60,11 +62,23 @@ export class CheckoutPaymentComponent implements OnInit, AfterViewInit, OnDestro
     this.cardNumber.destroy();
   }
 
-  onChange({ error }) {
-    if (error) {
-      this.cardErrors = error.message;
+  onChange(event) {
+    if (event.error) {
+      this.cardErrors = event.error.message;
     } else {
       this.cardErrors = null;
+    }
+
+    switch (event.elementType) {
+      case 'cardNumber':
+        this.isCardNumberValid = event.complete;
+        break;
+      case 'cardExpiry':
+        this.isCardExpiryValid = event.complete;
+        break;
+      case 'cardCvc':
+        this.isCardCvcValid = event.complete;
+        break;
     }
   }
 
