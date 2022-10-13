@@ -75,6 +75,7 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+    endpoints.MapFallbackToController("Index", "Fallback");
 });
 
 using var scope = app.Services.CreateScope();
