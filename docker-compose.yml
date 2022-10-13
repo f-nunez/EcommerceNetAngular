@@ -19,5 +19,14 @@ services:
     depends_on:
       - redis
 
+  database:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+    ports:
+      - 5432:5432
+
 volumes:
   redis-data:
