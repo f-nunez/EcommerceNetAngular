@@ -42,7 +42,7 @@ public class OrderService : IOrderService
 
         decimal subtotal = items.Sum(item => item.Price * item.Quantity);
 
-        var specification = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
+        var specification = new OrderByPaymentIntentWithItemsSpecification(basket.PaymentIntentId);
         var existingOrder = await _unitOfWork
             .Repository<Order>()
             .GetFirstOrDefaultAsync(specification);
