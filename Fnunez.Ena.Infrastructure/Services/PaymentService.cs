@@ -27,6 +27,9 @@ public class PaymentService : IPaymentService
         StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
 
         CustomerBasket basket = await _basketRepository.GetBasketAsync(basketId);
+        if (basket == null)
+            return null;
+
         DeliveryMethod deliveryMethod = null;
 
         if (basket.DeliveryMethodId.HasValue)
