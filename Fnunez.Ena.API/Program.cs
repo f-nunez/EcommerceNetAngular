@@ -14,10 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<StoreDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDbContext<AppIdentityDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+    x.UseNpgsql(builder.Configuration.GetConnectionString("IdentityConnection")));
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
