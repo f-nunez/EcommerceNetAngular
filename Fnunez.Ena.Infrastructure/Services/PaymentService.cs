@@ -1,6 +1,7 @@
 using Fnunez.Ena.Core.Entities;
 using Fnunez.Ena.Core.Entities.OrderAggregate;
 using Fnunez.Ena.Core.Interfaces;
+using Fnunez.Ena.Core.Specifications;
 using Microsoft.Extensions.Configuration;
 using Stripe;
 
@@ -67,6 +68,25 @@ public class PaymentService : IPaymentService
         await _basketRepository.UpdateBasketAsync(basket);
 
         return basket;
+    }
+
+    public async Task<Order> UpdateOrderPaymentFailed(string paymentIntentId)
+    {
+        var specification = new OrderByPaymentIntentWithItemsSpecification(paymentIntentId);
+        Order order = await _unitOfWork
+            .Repository<Order>()
+            .GetFirstOrDefaultAsync(specification);
+
+        if (order == null)
+            return null;
+
+        order.Status = OrderStatus.PaymentFailed;
+
+        _unitOfWork.Repository<Order>().Update(order);
+
+        await _unitOfWork.CompleteAsync();
+
+        return order;
     }
 
     private PaymentIntentCreateOptions MapPaymentIntentCreateOptions(CustomerBasket basket,
