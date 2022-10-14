@@ -48,6 +48,8 @@ builder.Services.AddSwaggerDocumentation();
 // Configure the http request pipeline
 var app = builder.Build();
 
+app.UseReverseProxySetup();
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseSwaggerDocumentation();
