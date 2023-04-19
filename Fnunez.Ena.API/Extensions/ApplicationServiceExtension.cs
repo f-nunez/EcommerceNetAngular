@@ -3,6 +3,7 @@ using Fnunez.Ena.Core.Interfaces;
 using Fnunez.Ena.Infrastructure.Data;
 using Fnunez.Ena.Infrastructure.Data.Repositories;
 using Fnunez.Ena.Infrastructure.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fnunez.Ena.API.Extensions;
@@ -38,5 +39,15 @@ public static class ApplicationServiceExtension
         });
 
         return services;
+    }
+
+    public static IApplicationBuilder UseReverseProxySetup(this IApplicationBuilder app)
+    {
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+
+        return app;
     }
 }

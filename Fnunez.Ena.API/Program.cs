@@ -7,16 +7,17 @@ using Fnunez.Ena.Infrastructure.Data;
 using Fnunez.Ena.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<StoreDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDbContext<AppIdentityDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+    x.UseNpgsql(builder.Configuration.GetConnectionString("IdentityConnection")));
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
@@ -47,6 +48,8 @@ builder.Services.AddSwaggerDocumentation();
 // Configure the http request pipeline
 var app = builder.Build();
 
+app.UseReverseProxySetup();
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseSwaggerDocumentation();
@@ -59,6 +62,12 @@ app.UseRouting();
 
 app.UseStaticFiles();
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Content")),
+    RequestPath = "/content"
+});
+
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
@@ -68,6 +77,7 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+    endpoints.MapFallbackToController("Index", "Fallback");
 });
 
 using var scope = app.Services.CreateScope();

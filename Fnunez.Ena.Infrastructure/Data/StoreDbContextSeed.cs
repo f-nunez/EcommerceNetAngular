@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using Fnunez.Ena.Core.Entities;
 using Fnunez.Ena.Core.Entities.OrderAggregate;
@@ -11,9 +12,11 @@ public class StoreDbContextSeed
     {
         try
         {
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             if (!dbContext.ProductBrands.Any())
             {
-                string brandsData = File.ReadAllText("../Fnunez.Ena.Infrastructure/Data/SeedData/brands.json");
+                string brandsData = File.ReadAllText(path + @"/Data/SeedData/brands.json");
                 var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
 
                 foreach (var item in brands)
@@ -24,7 +27,7 @@ public class StoreDbContextSeed
 
             if (!dbContext.ProductTypes.Any())
             {
-                string typesData = File.ReadAllText("../Fnunez.Ena.Infrastructure/Data/SeedData/types.json");
+                string typesData = File.ReadAllText(path + @"/Data/SeedData/types.json");
                 var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
 
                 foreach (var item in types)
@@ -35,7 +38,7 @@ public class StoreDbContextSeed
 
             if (!dbContext.Products.Any())
             {
-                string productsData = File.ReadAllText("../Fnunez.Ena.Infrastructure/Data/SeedData/products.json");
+                string productsData = File.ReadAllText(path + @"/Data/SeedData/products.json");
                 var products = JsonSerializer.Deserialize<List<Product>>(productsData);
 
                 foreach (var item in products)
@@ -46,7 +49,7 @@ public class StoreDbContextSeed
 
             if (!dbContext.DeliveryMethods.Any())
             {
-                string data = File.ReadAllText("../Fnunez.Ena.Infrastructure/Data/SeedData/delivery.json");
+                string data = File.ReadAllText(path + @"/Data/SeedData/delivery.json");
                 var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(data);
 
                 foreach (var item in deliveryMethods)

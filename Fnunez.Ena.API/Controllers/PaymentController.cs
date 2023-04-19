@@ -21,7 +21,7 @@ public class PaymentController : BaseApiController
     {
         _paymentService = paymentService;
         _logger = logger;
-        _webhookSecret = configuration["Stripe:WebhookSecretKet"];
+        _webhookSecret = configuration["Stripe:WebhookSecretKey"];
     }
 
     [Authorize]
