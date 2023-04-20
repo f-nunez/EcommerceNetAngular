@@ -1,0 +1,61 @@
+version: "3.9"
+
+name: ena
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - ena-shared-network
+    command: [ "redis-server", "--appendonly", "yes" ]
+    volumes:
+      - redis-data:/data
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=root
+      - HTTP_PASSWORD=secret
+    ports:
+      - 8081:8081
+    networks:
+      - ena-shared-network
+    depends_on:
+      - redis
+
+  database:
+    image: postgres
+    container_name: database
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+    ports:
+      - 5432:5432
+    networks:
+      - ena-shared-network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - ena-shared-network
+
+networks:
+  ena-shared-network:
+    name: ena-shared-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 70.0.0.0/16
+          gateway: 70.0.0.254
+
+volumes:
+  redis-data:
