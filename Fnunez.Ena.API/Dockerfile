@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0.16-alpine3.17-amd64 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0.5-alpine3.17-amd64 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0.408-alpine3.17-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0.203-alpine3.17-amd64 AS build
 WORKDIR /app
 COPY ./ ./ 
 
