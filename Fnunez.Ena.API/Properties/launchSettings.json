@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Fnunez.Ena.API": {
+    "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
