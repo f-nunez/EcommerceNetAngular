@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AccountService } from '../account/account.service';
 import { BasketService } from '../basket/basket.service';
-import { IBasketTotals } from '../shared/models/basket';
 
 @Component({
   selector: 'app-checkout',
@@ -11,8 +9,6 @@ import { IBasketTotals } from '../shared/models/basket';
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
-  checkoutForm: FormGroup;
-  basketTotals$: Observable<IBasketTotals>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -20,49 +16,43 @@ export class CheckoutComponent implements OnInit {
     private basketService: BasketService) { }
 
   ngOnInit(): void {
-    this.createCheckoutForm();
     this.getAddressFormValues();
     this.getDeliveryFormValues();
-    this.basketTotals$ = this.basketService.basketTotals$;
   }
 
-  createCheckoutForm() {
-    this.checkoutForm = this.formBuilder.group({
-      addressForm: this.formBuilder.group({
-        firstName: [null, Validators.required],
-        lastName: [null, Validators.required],
-        street: [null, Validators.required],
-        city: [null, Validators.required],
-        state: [null, Validators.required],
-        zipCode: [null, Validators.required]
-      }),
-      deliveryForm: this.formBuilder.group({
-        deliveryMethod: [null, Validators.required]
-      }),
-      paymentForm: this.formBuilder.group({
-        nameOnCard: [null, Validators.required]
-      })
-    });
-  }
+  checkoutForm = this.formBuilder.group({
+    addressForm: this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      street: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      zipCode: ['', Validators.required]
+    }),
+    deliveryForm: this.formBuilder.group({
+      deliveryMethod: ['', Validators.required]
+    }),
+    paymentForm: this.formBuilder.group({
+      nameOnCard: ['', Validators.required]
+    })
+  });
 
   getAddressFormValues() {
-    this.accountService.getUserAddress().subscribe(address => {
-      if (address) {
-        this.checkoutForm.get('addressForm').patchValue(address);
-      }
-    }, error => {
-      console.log(error);
+    this.accountService.getUserAddress().subscribe({
+      next: address => {
+        if (address != null)
+          this.checkoutForm.get('addressForm')?.patchValue(address);
+      },
+      error: error => console.log(error)
     });
   }
 
   getDeliveryFormValues() {
-    let basket = this.basketService.getCurrentBasketValue();
-    if (basket.deliveryMethodId !== null) {
-      this.checkoutForm
-        .get('deliveryForm')
-        .get('deliveryMethod')
-        .patchValue(basket.deliveryMethodId.toString());
+    const basket = this.basketService.getCurrentBasketValue();
+    if (basket != null && basket.deliveryMethodId) {
+      this.checkoutForm.get('deliveryForm')
+        ?.get('deliveryMethod')
+        ?.patchValue(basket.deliveryMethodId.toString());
     }
   }
-
 }

@@ -8,19 +8,19 @@
   <div class="d-flex align-items-center">
       <a class="position-relative" routerLink="/basket">
         <i class="fa fa-shopping-cart fa-2x me-5 text-dark"></i>
-        <div class="cart-no" *ngIf="(basket$ | async) as basket">{{basket.items.length}}</div>
+        <div class="cart-no" *ngIf="(basketService.basketSource$ | async) as basket">{{basket.items.length}}</div>
       </a>
 
-      <ng-container *ngIf="(currentUser$ | async) === null">
+      <ng-container *ngIf="(accountService.currentUser$ | async) === null">
         <a class="btn btn-outline-secondary me-2" href="#" routerLink="/account/login">Login</a>
         <a class="btn btn-outline-secondary me-3" href="#" routerLink="/account/register">Sign up</a>
       </ng-container>
 
-      <ng-container *ngIf="(currentUser$ | async)">
+      <ng-container *ngIf="accountService.currentUser$ | async as user">
         <div class="btn-group" dropdown>
 
           <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
-            <strong>Welcome {{(currentUser$ | async).displayName}}</strong>
+            <strong>Welcome {{user.displayName}}</strong>
           </button>
 
           <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic" style="cursor: pointer;">
@@ -39,7 +39,7 @@
             <li class="divider dropdown-divider"></li>
 
             <li role="menuitem">
-              <a class="dropdown-item d-flex align-items-center py-2" (click)="logout()">
+              <a class="dropdown-item d-flex align-items-center py-2" (click)="accountService.logout()">
                 <i class="fa fa-sign-out mx-3"></i> Logout
               </a>
             </li>

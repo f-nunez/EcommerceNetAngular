@@ -4,7 +4,7 @@ name: ecommerce-net-angular
 
 services:
   redis:
-    image: redis:alpine
+    image: redis:7.0.11-alpine
     container_name: redis
     ports:
       - 6379:6379
@@ -29,7 +29,7 @@ services:
       - redis
 
   database:
-    image: postgres:alpine
+    image: postgres:15.2-alpine
     container_name: database
     restart: always
     environment:
@@ -48,34 +48,6 @@ services:
       - 8080:8080
     networks:
       - ena-shared-network
-
-  ena-api:
-    build:
-      context: .
-      dockerfile: ./Fnunez.Ena.Api/Dockerfile
-    image: ena-api
-    container_name: ena-api
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=https://+:7030;http://+:5039
-      - ASPNETCORE_HTTPS_PORT=7030
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-    expose:
-      - 7030:7030
-      - 5039:5039
-    ports:
-      - 7030:7030
-      - 5039:5039
-    networks:
-      - ena-shared-network
-    restart: on-failure
-    depends_on:
-      - database
-      - redis
-    volumes:
-      - ~/.aspnet/https:/https:ro
-    entrypoint: /bin/sh -c "update-ca-certificates && dotnet Fnunez.Ena.API.dll"
 
 networks:
   ena-shared-network:

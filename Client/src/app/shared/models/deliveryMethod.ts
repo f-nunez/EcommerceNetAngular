@@ -1,4 +1,4 @@
-export interface IDeliveryMethod {
+export interface DeliveryMethod {
     id: number;
     deliveryTime: string;
     description: string;

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map, of, switchMap, timer } from 'rxjs';
+import { debounceTime, finalize, map, of, switchMap, take, timer } from 'rxjs';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -9,31 +9,23 @@ import { AccountService } from '../account.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
-  errors: string[];
+export class RegisterComponent {
+  errors: string[] | null = null;
 
   constructor(private accountService: AccountService, private router: Router, private formBuilder: FormBuilder) { }
 
-  ngOnInit(): void {
-    this.createRegisterForm();
-  }
-
-  createRegisterForm() {
-    this.registerForm = this.formBuilder.group({
-      displayName: [null, [Validators.required]],
-      email: [
-        null,
-        [Validators.required, Validators.pattern('[\\w-]+@([\\w-]+\\.)+[\\w-]+')],
-        [this.validateIfEmailIsNotTaken()]
-      ],
-      password: [null, [Validators.required]]
-    });
-  }
+  registerForm = this.formBuilder.group({
+    displayName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email], [this.validateIfEmailIsNotTaken()]],
+    password: ['', [Validators.required]],
+  })
 
   onSubmit() {
     this.accountService.register(this.registerForm.value).subscribe({
-      next: () => this.router.navigateByUrl('/shop'),
+      next: () => {
+        console.log("Navigating!");
+        this.router.navigateByUrl('/shop');
+      },
       error: (error) => {
         let errorProperties = Object.keys(error.errors);
         let errorArray = [];
@@ -56,11 +48,10 @@ export class RegisterComponent implements OnInit {
           return this.accountService.emailExists(control.value).pipe(
             map(response => {
               return response ? { emailExists: true } : null;
-            })
+            }, finalize(() => control.markAsTouched()))
           );
         })
       );
     };
   }
-
 }

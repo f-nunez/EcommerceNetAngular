@@ -1,4 +1,4 @@
-export interface IUser {
+export interface User {
     displayName: string;
     email: string;
     token: string;
