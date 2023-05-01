@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { IBrand } from '../shared/models/brand';
-import { IProduct } from '../shared/models/product';
-import { IProductType } from '../shared/models/productType';
+import { Brand } from '../shared/models/brand';
+import { Product } from '../shared/models/product';
+import { ProductType } from '../shared/models/productType';
 import { ShopParams } from '../shared/models/shopParams';
 import { ShopService } from './shop.service';
 
@@ -11,10 +11,10 @@ import { ShopService } from './shop.service';
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
-  @ViewChild('search', { static: false }) searchTerm: ElementRef;
-  brands: IBrand[];
-  products: IProduct[];
-  productTypes: IProductType[];
+  @ViewChild('search') searchTerm?: ElementRef;
+  brands: Brand[] = [];
+  products: Product[] = [];
+  productTypes: ProductType[] = [];
   shopParams: ShopParams;
   sortOptions = [
     { name: 'Alphabetical', value: "name" },
@@ -62,6 +62,7 @@ export class ShopComponent implements OnInit {
     shopParams.brandId = brandId;
     shopParams.pageNumber = 1;
     this.shopService.setShopParams(shopParams);
+    this.shopParams = shopParams;
     this.getProducts();
   }
 
@@ -72,6 +73,7 @@ export class ShopComponent implements OnInit {
 
     shopParams.pageNumber = event;
     this.shopService.setShopParams(shopParams);
+    this.shopParams = shopParams;
     this.getProducts(true);
   }
 
@@ -80,11 +82,14 @@ export class ShopComponent implements OnInit {
     shopParams.productTypeId = productTypeId;
     shopParams.pageNumber = 1;
     this.shopService.setShopParams(shopParams);
+    this.shopParams = shopParams;
     this.getProducts();
   }
 
   onReset() {
-    this.searchTerm.nativeElement.value = '';
+    if (this.searchTerm)
+      this.searchTerm.nativeElement.value = '';
+
     this.shopParams = new ShopParams();
     this.shopService.setShopParams(this.shopParams);
     this.getProducts();
@@ -92,9 +97,10 @@ export class ShopComponent implements OnInit {
 
   onSearch() {
     const shopParams = this.shopService.getShopParams();
-    shopParams.search = this.searchTerm.nativeElement.value;
+    shopParams.search = this.searchTerm?.nativeElement.value;
     shopParams.pageNumber = 1;
     this.shopService.setShopParams(shopParams);
+    this.shopParams = shopParams;
     this.getProducts();
   }
 
@@ -102,6 +108,7 @@ export class ShopComponent implements OnInit {
     const shopParams = this.shopService.getShopParams();
     shopParams.sort = sort;
     this.shopService.setShopParams(shopParams);
+    this.shopParams = shopParams;
     this.getProducts();
   }
 }

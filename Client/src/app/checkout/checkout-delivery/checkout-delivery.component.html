@@ -1,4 +1,4 @@
-<div class="mt-4" [formGroup]="checkoutForm">
+<div class="mt-4" *ngIf="checkoutForm" [formGroup]="checkoutForm">
     <h4 class="mb-3">Choose your delivery method</h4>
 
     <div class="row mx-3" formGroupName="deliveryForm">
@@ -19,7 +19,7 @@
         <i class="fa fa-angle-left"></i> Back to Address
     </button>
 
-    <button class="btn btn-primary" cdkStepperNext [disabled]="checkoutForm.get('deliveryForm').invalid">
+    <button class="btn btn-primary" cdkStepperNext [disabled]="checkoutForm?.get('deliveryForm')?.invalid">
         Go to Review <i class="fa fa-angle-right"></i>
     </button>
 </div>
